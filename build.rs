@@ -5,7 +5,7 @@ extern crate pkg_config;
 extern crate regex;
 
 use std::env;
-use std::fs::{self, create_dir, symlink_metadata, File};
+use std::fs::{self, File};
 use std::io::{self, BufRead, BufReader, Write};
 use std::path::PathBuf;
 use std::process::Command;
@@ -884,6 +884,7 @@ fn main() {
         ],
     );
 
+    /*
     let tmp = std::env::current_dir().unwrap().join("tmp");
     if symlink_metadata(&tmp).is_err() {
         create_dir(&tmp).expect("Failed to create temporary output dir");
@@ -897,6 +898,8 @@ fn main() {
     for dir in &include_paths {
         write!(f, " -I {}", dir.to_string_lossy().into_owned()).expect("failed to write incdir");
     }
+    */
+
     let clang_includes = include_paths
         .iter()
         .map(|include| format!("-I{}", include.to_string_lossy()));
@@ -906,7 +909,7 @@ fn main() {
     // the resulting bindings.
     let mut builder = bindgen::Builder::default()
         .clang_args(clang_includes)
-        .ctypes_prefix("libc")
+        //.ctypes_prefix("libc")
         // https://github.com/servo/rust-bindgen/issues/687
         .blacklist_type("FP_NAN")
         .blacklist_type("FP_INFINITE")
